@@ -1,0 +1,109 @@
+{
+  "name": "minicaches",
+  "version": "0.1.1",
+  "description": "A fast, lightweight, async-compatible in-memory cache with TTL support and automatic cleanup - Rust-powered native addon",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/execute-soft/minicache"
+  },
+  "license": "MIT",
+  "keywords": [
+    "cache",
+    "ttl",
+    "async",
+    "memory",
+    "rust",
+    "native",
+    "performance",
+    "concurrency"
+  ],
+  "engines": {
+    "node": ">= 16"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "scripts": {
+    "artifacts": "napi artifacts",
+    "bench": "node -r @swc-node/register benchmark/bench.ts",
+    "build": "napi build --platform --release --pipe \"prettier -w\"",
+    "build:debug": "napi build --platform --pipe \"prettier -w\"",
+    "format": "run-p format:prettier format:rs format:toml",
+    "format:prettier": "prettier . -w",
+    "format:rs": "cargo fmt",
+    "format:toml": "@taplo/cli format",
+    "lint": "eslint . -c .eslintrc.yml",
+    "prepublishOnly": "napi prepublish -t npm",
+    "test": "ava",
+    "version": "napi version"
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "2.18.4",
+    "@swc-node/register": "^1.8.0",
+    "@types/node": "20.10.5",
+    "ava": "^6.0.1",
+    "chalk": "^5.3.0",
+    "eslint": "8.56.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.2",
+    "npm-run-all2": "^6.1.1",
+    "prettier": "^3.1.1",
+    "@taplo/cli": "^0.7.0",
+    "typescript": "^5.3.3"
+  },
+  "ava": {
+    "require": [
+      "@swc-node/register"
+    ],
+    "extensions": [
+      "ts"
+    ],
+    "timeout": "3m",
+    "workerThreads": false,
+    "environmentVariables": {
+      "TS_NODE_PROJECT": "./tsconfig.json"
+    }
+  },
+  "prettier": {
+    "printWidth": 120,
+    "semi": false,
+    "trailingComma": "all",
+    "singleQuote": true,
+    "arrowParens": "always"
+  },
+  "packageManager": "yarn@4.0.2",
+  "napi": {
+    "binaryName": "minicache",
+    "cargoName": "minicache",
+    "cargoFlags": "--features napi",
+    "targets": [
+      "x86_64-apple-darwin",
+      "aarch64-apple-darwin",
+      "x86_64-pc-windows-msvc",
+      "x86_64-unknown-linux-gnu",
+      "aarch64-unknown-linux-gnu",
+      "aarch64-pc-windows-msvc",
+      "armv7-unknown-linux-gnueabihf",
+      "aarch64-linux-android",
+      "x86_64-unknown-freebsd",
+      "i686-pc-windows-msvc",
+      "armv7-linux-androideabi"
+    ]
+  },
+  "optionalDependencies": {
+    "minicaches-win32-x64-msvc": "0.1.1",
+    "minicaches-darwin-x64": "0.1.1",
+    "minicaches-linux-x64-gnu": "0.1.1"
+  }
+}

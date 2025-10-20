@@ -109,4 +109,11 @@
 
 pub mod core;
 
+// Export N-API bindings when the napi feature is enabled
+#[cfg(feature = "napi")]
+pub mod napi_simple;
+
+#[cfg(feature = "napi")]
+pub use napi_simple::*;
+
 pub use core::MiniCache;
