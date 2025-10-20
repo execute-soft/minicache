@@ -90,11 +90,14 @@ where
     /// use minicache::MiniCache;
     /// use std::time::Duration;
     ///
-    /// // Fast cleanup every 100ms
-    /// let fast_cache = MiniCache::<String, String>::new(Duration::from_millis(100));
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     // Fast cleanup every 100ms
+    ///     let fast_cache = MiniCache::<String, String>::new(Duration::from_millis(100));
     ///
-    /// // Slow cleanup every 5 minutes
-    /// let slow_cache = MiniCache::<String, String>::new(Duration::from_secs(300));
+    ///     // Slow cleanup every 5 minutes
+    ///     let slow_cache = MiniCache::<String, String>::new(Duration::from_secs(300));
+    /// }
     /// ```
     pub fn new(cleanup_interval: Duration) -> Self {
         let cache = MiniCache {
