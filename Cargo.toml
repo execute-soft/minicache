@@ -1,7 +1,24 @@
 [package]
 name = "minicache"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+authors = ["Your Name morshedulmunna1@gmail.com"]
+description = "A fast, lightweight, async-compatible in-memory cache with TTL support and automatic cleanup"
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/execute-soft/minicache"
+repository = "https://github.com/execute-soft/minicache"
+documentation = "https://docs.rs/minicache"
+keywords = ["cache", "ttl", "async", "tokio", "memory"]
+categories = ["caching", "data-structures", "concurrency", "asynchronous"]
+exclude = [
+    "target/*",
+    "benchmark_results/*",
+    "*.sh",
+    "docs/BENCHMARKS.md",
+    "docs/PERFORMANCE_GUIDE.md",
+    "docs/README_BENCHMARKS.md"
+]
 
 [dependencies]
 tokio = {version = "1.48.0", features = ["full"]}
