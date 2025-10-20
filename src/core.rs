@@ -6,6 +6,9 @@ use std::time::{Duration, Instant};
 use tokio::sync::RwLock;
 use tokio::time::interval;
 
+/// Type alias for the internal cache storage
+type CacheMap<K, V> = Arc<RwLock<HashMap<K, (V, Option<Instant>)>>>;
+
 /// A fast, thread-safe, async-compatible in-memory cache with TTL support and automatic cleanup.
 ///
 /// `MiniCache` provides a simple key-value store that can automatically expire entries after
@@ -65,7 +68,7 @@ use tokio::time::interval;
 /// ```
 #[derive(Clone)]
 pub struct MiniCache<K, V> {
-    inner: Arc<RwLock<HashMap<K, (V, Option<Instant>)>>>,
+    inner: CacheMap<K, V>,
 }
 
 impl<K, V> MiniCache<K, V>
@@ -323,6 +326,38 @@ where
         map.iter()
             .filter(|(_, (_, expire_at))| expire_at.map_or(true, |t| Instant::now() < t))
             .count()
+    }
+
+    /// Returns `true` if the cache contains no valid (non-expired) entries.
+    ///
+    /// This method is more efficient than calling `len() == 0` as it can
+    /// return early once a valid entry is found.
+    ///
+    /// # Returns
+    ///
+    /// `true` if the cache is empty, `false` otherwise
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use minicache::MiniCache;
+    /// use std::time::Duration;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let cache = MiniCache::new(Duration::from_secs(60));
+    ///     
+    ///     assert!(cache.is_empty().await);
+    ///     
+    ///     cache.set("key1", "value1", None).await;
+    ///     assert!(!cache.is_empty().await);
+    /// }
+    /// ```
+    pub async fn is_empty(&self) -> bool {
+        let map = self.inner.read().await;
+        let now = Instant::now();
+        !map.iter()
+            .any(|(_, (_, expire_at))| expire_at.map_or(true, |t| now < t))
     }
 
     /// Returns a vector of all valid (non-expired) keys in the cache.
